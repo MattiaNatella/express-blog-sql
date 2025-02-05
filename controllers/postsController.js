@@ -17,7 +17,15 @@ const index = (req, res) => {
 
 const show = (req, res) => {
     const id = req.params.id
-    res.send(`sono la rotta Show e ti mostro l'id che hai inserito: ${id}`)
+
+    //preparo la query
+    const sql = 'SELECT * FROM posts WHERE id = ?'
+
+    connection.query(sql, [id], (err, results) => {
+        if (err) return res.status(500).json({ error: 'Query al database fallita' })
+        res.json(results[0])
+    })
+
 }
 
 //store
@@ -33,6 +41,8 @@ const destroy = (req, res) => {
 
     //preparo la query
     const sql = 'DELETE FROM posts WHERE id = ? '
+
+    //eseguo la query
     connection.query(sql, [id], (err) => {
         if (err) return res.status(500).json({ error: 'Query al database fallita' })
         res.sendStatus(204)
