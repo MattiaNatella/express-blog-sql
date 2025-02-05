@@ -28,4 +28,15 @@ const show = (req, res) => {
 
 //destroy
 
-export default { index, show }
+const destroy = (req, res) => {
+    const id = req.params.id
+
+    //preparo la query
+    const sql = 'DELETE FROM posts WHERE id = ? '
+    connection.query(sql, [id], (err) => {
+        if (err) return res.status(500).json({ error: 'Query al database fallita' })
+        res.sendStatus(204)
+    })
+}
+
+export default { index, show, destroy }
