@@ -19,20 +19,36 @@ const show = (req, res) => {
     const id = req.params.id
 
     //preparo la query
-    const sql = 'SELECT * FROM posts WHERE id = ?'
+    const sql = `SELECT *, T.*
+FROM posts P
+JOIN post_tag PT ON P.id = PT.post_id
+JOIN tags T ON pt.tag_id = T.id
+WHERE P.id = ?;`
 
     connection.query(sql, [id], (err, results) => {
         if (err) return res.status(500).json({ error: 'Query al database fallita' })
-        res.json(results[0])
+
+        //creo un oggetto che mi servirà ad eliminare le ridondanze nella response
+        const postObj = {
+            id: results[0].id,
+            title: results[0].title,
+            content: results[0].content,
+            image: results[0].image,
+            tags: []
+        }
+
+        results.forEach(item => {
+            postObj.tags.push({
+                id: item.id,
+                tag: item.label
+            })
+        })
+
+
+        res.json(postObj)
     })
 
 }
-
-//store
-
-//update
-
-//modify
 
 //destroy
 
