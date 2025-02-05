@@ -1,4 +1,5 @@
-
+//importo il modulo di connessione al database blog
+import connection from "../data/data.js"
 //index
 const index = (req, res) => {
     res.send('Rotta index: stampo tutti i post')
