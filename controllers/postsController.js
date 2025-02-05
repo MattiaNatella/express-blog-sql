@@ -2,7 +2,15 @@
 import connection from "../data/data.js"
 //index
 const index = (req, res) => {
-    res.send('Rotta index: stampo tutti i post')
+
+    //preparo la query
+    const sql = 'SELECT * FROM posts'
+
+    //eseguiamo la query
+    connection.query(sql, (err, results) => {
+        if (err) return res.status(500).json({ error: 'Query al database fallita' })
+        res.json(results)
+    })
 }
 
 //show
